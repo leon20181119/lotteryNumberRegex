@@ -1,0 +1,825 @@
+package com.sme.frameworkBusiness.allDefine.kernelBusiness.lotto;
+
+import java.util.HashSet;
+import java.util.List;
+
+import org.springframework.util.StringUtils;
+
+import com.alibaba.fastjson.JSONArray;
+import com.sme.frameworkBusiness.allDefine.kernelBusiness.lotto.SystemLottoClassifyDef.ILottoWinCodeExplainer.China_11Xuan5;
+import com.sme.frameworkBusiness.allDefine.kernelBusiness.lotto.SystemLottoClassifyDef.ILottoWinCodeExplainer.China_Kuai3;
+import com.sme.frameworkBusiness.allDefine.kernelBusiness.lotto.SystemLottoClassifyDef.ILottoWinCodeExplainer.China_Kuai8;
+import com.sme.frameworkBusiness.allDefine.kernelBusiness.lotto.SystemLottoClassifyDef.ILottoWinCodeExplainer.China_PK10;
+import com.sme.frameworkBusiness.allDefine.kernelBusiness.lotto.SystemLottoClassifyDef.ILottoWinCodeExplainer.China_SSC;
+import com.sme.frameworkBusiness.allDefine.kernelBusiness.lotto.SystemLottoClassifyDef.ILottoWinCodeExplainer.China_chongqing10;
+import com.sme.frameworkBusiness.allDefine.kernelBusiness.lotto.SystemLottoClassifyDef.ILottoWinCodeExplainer.China_fucai3d;
+import com.sme.frameworkBusiness.allDefine.kernelBusiness.lotto.SystemLottoClassifyDef.ILottoWinCodeExplainer.China_guangxi10;
+import com.sme.frameworkBusiness.allDefine.kernelBusiness.lotto.SystemLottoClassifyDef.ILottoWinCodeExplainer.China_hecai6;
+import com.sme.frameworkBusiness.allDefine.kernelBusiness.lotto.SystemLottoClassifyDef.ILottoWinCodeExplainer.China_luck28;
+import com.sme.frameworkBusiness.allDefine.kernelBusiness.lotto.SystemLottoClassifyDef.ILottoWinCodeExplainer.Malaysia_damacai;
+import com.sme.frameworkBusiness.allDefine.kernelBusiness.lotto.SystemLottoClassifyDef.ILottoWinCodeExplainer.Malaysia_duoduocai;
+import com.sme.frameworkBusiness.allDefine.kernelBusiness.lotto.SystemLottoClassifyDef.ILottoWinCodeExplainer.Malaysia_wanzi;
+import com.sme.frameworkBusiness.allDefine.kernelBusiness.lotto.SystemLottoClassifyDef.ILottoWinCodeExplainer.Vietnam_mid_south;
+import com.sme.frameworkBusiness.allDefine.kernelBusiness.lotto.SystemLottoClassifyDef.ILottoWinCodeExplainer.Vietnam_north;
+import com.sme.frameworkBusiness.allDefine.kernelBusiness.lotto.foreign.SystemMidSouthPrizeLevelDefine;
+import com.sme.frameworkBusiness.allDefine.kernelBusiness.lotto.foreign.SystemNorthPrizeLevelDefine;
+import com.sme.frameworkBusiness.allDefine.kernelBusiness.lotto.luckyNumber.VietnamLuckyEntity;
+import com.sme.frameworkFoundation.common.localWrapper.enumFinder.EnumFinder;
+import com.sme.frameworkFoundation.common.localWrapper.enumFinder.EnumKeyGetter;
+
+/**
+ * SystemLottoClassifyDef
+ * </p>
+ * 彩票系统-类型定义
+ * </P>
+ * 包含系统所支持的所有类型的彩种（【中国彩】、【外国彩】等）
+ * </p>
+ * 这个彩种类型表-需要跟【玩法库】里面的彩种类型表一一对应，目前两边独立修改（做好对应关系），后面可以考虑依赖关系
+ */
+public enum SystemLottoClassifyDef {
+    /**
+     * 时时彩
+     * </p>
+     * 【字典编号】：1
+     */
+    LOTTO_SSC(1, "时时彩", "SSC", new China_SSC()),
+    /**
+     * 11选5
+     * </p>
+     * 【字典编号】：2
+     */
+    LOTTO_11_XUAN_5(2, "11选5", "11X5", new China_11Xuan5()),
+    /**
+     * PK10
+     * </p>
+     * 【字典编号】：3
+     */
+    LOTTO_PK10(3, "PK10", "PK10", new China_PK10()),
+    /**
+     * 快3
+     * </p>
+     * 【字典编号】：4
+     */
+    LOTTO_KUAI_3(4, "快3", "K3", new China_Kuai3()),
+    /**
+     * 快乐8
+     * </p>
+     * 【字典编号】：5
+     */
+    LOTTO_KUAILE_8(5, "快乐8", "KL8", new China_Kuai8()),
+    /**
+     * 幸运28（PC蛋蛋）
+     * </p>
+     * 【字典编号】：6
+     */
+    LOTTO_XINGYUN_28(6, "幸运28（PC蛋蛋）", "XY28", new China_luck28()),
+    /**
+     * 六合彩
+     * </p>
+     * <p>
+     * 【字典编号】：7
+     */
+    LOTTO_LIUHECAI(7, "六合彩", "LHC", new China_hecai6()),
+    /**
+     * 福彩3D
+     * </p>
+     * 【字典编号】：8
+     */
+    LOTTO_3D(8, "福彩3D", "3D", new China_fucai3d()),
+    /**
+     * 重庆/广东快10
+     * </p>
+     * 【字典编号】：9
+     */
+    LOTTO_CQ_KUAI_10(9, "CQ-快10", "GDK10", new China_chongqing10()),
+    /**
+     * 广西快10
+     * </p>
+     * 【字典编号】：10
+     */
+    LOTTO_GX_KUAI_10(10, "GX-快10", "GXK10", new China_guangxi10()),
+    /**
+     * 马来西亚-万能万字
+     * </p>
+     * 【字典编号】：101
+     */
+    LOTTO_WAN_NENG_WAN_ZI(101, "马来西亚-万能万字", "LOTTO_WAN_NENG_WAN_ZI", new Malaysia_wanzi()),
+    /**
+     * 马来西亚-大马彩
+     * </p>
+     * 【字典编号】：102
+     */
+    LOTTO_DA_MA_CAI(102, "马来西亚-大马彩", "LOTTO_DA_MA_CAI", new Malaysia_damacai()),
+    /**
+     * 马来西亚-多多彩
+     * </p>
+     * 【字典编号】：103
+     */
+    LOTTO_DUO_DUO_CAI(103, "马来西亚-多多彩", "LOTTO_DUO_DUO_CAI", new Malaysia_duoduocai()),
+    /**
+     * 越南-传统-中南部
+     * </p>
+     * 【字典编号】：104
+     */
+    LOTTO_VIETNAM_TRA_MID_SOUTH(104, "越南-传统-中南部", "LOTTO_VIETNAM_TRA_MID_SOUTH", new Vietnam_mid_south()),
+    /**
+     * 越南-传统-北部
+     * </p>
+     * 【字典编号】：105
+     */
+    LOTTO_VIETNAM_TRA_NORTH(105, "越南-传统-北部", "LOTTO_VIETNAM_TRA_NORTH", new Vietnam_north());
+
+    /**
+     * 彩种编号：【字典编号】
+     */
+    public final int code;
+    /** 编码 */
+    public final String codeStr;
+    /**
+     * 彩种描述
+     */
+    public final String des;
+    /**
+     * 【中奖号码】-【规则】描述
+     */
+    public final ILottoWinCodeExplainer winCodeExplainer;
+
+    SystemLottoClassifyDef(int code, String des, String codeStr, ILottoWinCodeExplainer winCodeExplainer) {
+        this.code = code;
+        this.des = des;
+        this.codeStr = codeStr;
+        this.winCodeExplainer = winCodeExplainer;
+    }
+
+    /**
+     * key构造器
+     */
+    private static class KeyGetter implements EnumKeyGetter<SystemLottoClassifyDef, Integer> {
+        @Override
+        public Integer getKey(SystemLottoClassifyDef enumValue) {
+            // TODO Auto-generated method stub
+            return enumValue.code;
+        }
+    }
+
+    /**
+     * 查找器
+     */
+    private static final EnumFinder<SystemLottoClassifyDef, Integer> s_finder = new EnumFinder<SystemLottoClassifyDef, Integer>(
+            SystemLottoClassifyDef.class, new KeyGetter());
+
+    /**
+     * 查找方法
+     */
+    public static SystemLottoClassifyDef find(int code) {
+        return s_finder.find(code);
+    }
+
+    /**
+     * 通过VR彩种类型code查找
+     */
+    public static SystemLottoClassifyDef findByCodeStr(String codeStr) {
+        for (SystemLottoClassifyDef item : SystemLottoClassifyDef.values()) {
+            if (item.codeStr.equals(codeStr))
+                return item;
+        }
+        return null;
+    }
+
+    /**
+     * 类型列表
+     */
+    public static List<SystemLottoClassifyDef> EnumList() {
+        return s_finder.EnumList();
+    }
+
+    /**
+     * SystemLottoRegionDef
+     * </p>
+     * 彩票系统-地域定义
+     * </P>
+     * 一般地域不同，彩票的【结构】（中奖结构、注单结构、判奖结构）都会有差异
+     */
+    public enum SystemLottoRegionDef {
+        /**
+         * 中国彩
+         * </p>
+         * 【字典编号】：1
+         */
+        LOTTO_REGION_CHINA(1, "中国区"),
+        /**
+         * 马来西亚彩
+         * </p>
+         * 【字典编号】：2
+         */
+        LOTTO_REGION_MALAYSIA(2, "马来西亚区"),
+        /**
+         * 马来西亚彩
+         * </p>
+         * 【字典编号】：3
+         */
+        LOTTO_REGION_VIETNAM(3, "越南"),
+
+        /**
+         * 欧美
+         * </p>
+         * 【字典编号】：4
+         */
+        LOTTO_REGION_EUROPE_AND_AMERICA(4, "欧美"),
+        /**
+         * 东南亚
+         * </p>
+         * 【字典编号】：5
+         */
+        LOTTO_REGION_EAST_SOUTH_ASIA(5, "东南亚"),
+
+
+        ;
+
+        /**
+         * 地域编号：【字典编号】
+         */
+        public final int code;
+        /**
+         * 地域描述
+         */
+        public final String des;
+
+        SystemLottoRegionDef(int code, String des) {
+            this.code = code;
+            this.des = des;
+        }
+    }
+
+    /**
+     * 【wincode】解释类
+     * </p>
+     * 帮助解释【wincode】规则
+     */
+    public interface ILottoWinCodeExplainer {
+        /**
+         * 中奖号码-合法性检测
+         */
+        boolean winCodeCheck(String winCode);
+
+        /**
+         * 中国彩
+         */
+        public interface IChina_cai extends ILottoWinCodeExplainer {
+            public int win_code_length();
+
+            public int win_code_begin_number();
+
+            public int win_code_end_number();
+
+            public boolean win_code_repeatable();
+        }
+
+        /**
+         * 马来彩
+         */
+        public interface IMalasia_cai extends ILottoWinCodeExplainer {
+            public int win_code_length();
+
+            public int win_code_count();
+        }
+
+        /**
+         * 越南彩
+         */
+        public interface IVietnam_cai extends ILottoWinCodeExplainer {
+            public int win_code_begin_number();
+
+            public int win_code_end_number();
+
+            public boolean win_code_repeatable();
+        }
+
+        public final class China_SSC implements IChina_cai {
+            @Override
+            public int win_code_length() {
+                // TODO Auto-generated method stub
+                return 5;
+            }
+
+            @Override
+            public int win_code_begin_number() {
+                // TODO Auto-generated method stub
+                return 0;
+            }
+
+            @Override
+            public int win_code_end_number() {
+                // TODO Auto-generated method stub
+                return 9;
+            }
+
+            @Override
+            public boolean win_code_repeatable() {
+                // TODO Auto-generated method stub
+                return true;
+            }
+
+            @Override
+            public boolean winCodeCheck(String winCode) {
+                if (StringUtils.isEmpty(winCode))
+                    return false;
+                return winCode.matches("\\d(,\\d){4}");
+            }
+        }
+
+        public final class China_11Xuan5 implements IChina_cai {
+            @Override
+            public int win_code_length() {
+                // TODO Auto-generated method stub
+                return 5;
+            }
+
+            @Override
+            public int win_code_begin_number() {
+                // TODO Auto-generated method stub
+                return 1;
+            }
+
+            @Override
+            public int win_code_end_number() {
+                // TODO Auto-generated method stub
+                return 11;
+            }
+
+            @Override
+            public boolean win_code_repeatable() {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            @Override
+            public boolean winCodeCheck(String winCode) {
+                if (StringUtils.isEmpty(winCode) || cheakIsRepeat(winCode.split(",")))
+                    return false;
+                return winCode.matches("([1-9]|1[0-1])(,[1-9]|,1[0-1]){4}");
+            }
+        }
+
+        public final class China_PK10 implements IChina_cai {
+            @Override
+            public int win_code_length() {
+                // TODO Auto-generated method stub
+                return 10;
+            }
+
+            @Override
+            public int win_code_begin_number() {
+                // TODO Auto-generated method stub
+                return 1;
+            }
+
+            @Override
+            public int win_code_end_number() {
+                // TODO Auto-generated method stub
+                return 10;
+            }
+
+            @Override
+            public boolean win_code_repeatable() {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            @Override
+            public boolean winCodeCheck(String winCode) {
+                if (StringUtils.isEmpty(winCode) || cheakIsRepeat(winCode.split(",")))
+                    return false;
+                return winCode.matches("([1-9]|10)(,[1-9]|,10){9}");
+            }
+        }
+
+        public final class China_Kuai3 implements IChina_cai {
+            @Override
+            public int win_code_length() {
+                // TODO Auto-generated method stub
+                return 3;
+            }
+
+            @Override
+            public int win_code_begin_number() {
+                // TODO Auto-generated method stub
+                return 1;
+            }
+
+            @Override
+            public int win_code_end_number() {
+                // TODO Auto-generated method stub
+                return 6;
+            }
+
+            @Override
+            public boolean win_code_repeatable() {
+                // TODO Auto-generated method stub
+                return true;
+            }
+
+            @Override
+            public boolean winCodeCheck(String winCode) {
+                if (StringUtils.isEmpty(winCode))
+                    return false;
+                return winCode.matches("[1-6](,[1-6]){2}");
+            }
+        }
+
+        public final class China_Kuai8 implements IChina_cai {
+            @Override
+            public int win_code_length() {
+                // TODO Auto-generated method stub
+                return 20;
+            }
+
+            @Override
+            public int win_code_begin_number() {
+                // TODO Auto-generated method stub
+                return 1;
+            }
+
+            @Override
+            public int win_code_end_number() {
+                // TODO Auto-generated method stub
+                return 80;
+            }
+
+            @Override
+            public boolean win_code_repeatable() {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            @Override
+            public boolean winCodeCheck(String winCode) {
+                if (StringUtils.isEmpty(winCode) || cheakIsRepeat(winCode.split(",")))
+                    return false;
+                return winCode.matches("([1-9]|[1-7]\\d|80)(,[1-9]|,[1-7]\\d|,80){19}");
+            }
+
+        }
+
+        public final class China_luck28 implements IChina_cai {
+            /**
+             * 注意这里第四位，是前三位的和值
+             */
+            @Override
+            public int win_code_length() {
+                // TODO Auto-generated method stub
+                return 3;
+            }
+
+            @Override
+            public int win_code_begin_number() {
+                // TODO Auto-generated method stub
+                return 0;
+            }
+
+            @Override
+            public int win_code_end_number() {
+                // TODO Auto-generated method stub
+                return 9;
+            }
+
+            @Override
+            public boolean win_code_repeatable() {
+                // TODO Auto-generated method stub
+                return true;
+            }
+
+            @Override
+            public boolean winCodeCheck(String winCode) {
+                if (StringUtils.isEmpty(winCode))
+                    return false;
+                if (!winCode.matches("\\d(,\\d){2},\\d{1,2}") || !cheakLucky28Sum(winCode.split(","))) {
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        public final class China_hecai6 implements IChina_cai {
+            @Override
+            public int win_code_length() {
+                // TODO Auto-generated method stub
+                return 7;
+            }
+
+            @Override
+            public int win_code_begin_number() {
+                // TODO Auto-generated method stub
+                return 1;
+            }
+
+            @Override
+            public int win_code_end_number() {
+                // TODO Auto-generated method stub
+                return 49;
+            }
+
+            @Override
+            public boolean win_code_repeatable() {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            @Override
+            public boolean winCodeCheck(String winCode) {
+                if (StringUtils.isEmpty(winCode) || cheakIsRepeat(winCode.split(",")))
+                    return false;
+                return winCode.matches("([1-9]|[1-4]\\d)(,[1-9]|,[1-4]\\d){6}");
+            }
+        }
+
+        public final class China_fucai3d implements IChina_cai {
+            @Override
+            public int win_code_length() {
+                // TODO Auto-generated method stub
+                return 3;
+            }
+
+            @Override
+            public int win_code_begin_number() {
+                // TODO Auto-generated method stub
+                return 0;
+            }
+
+            @Override
+            public int win_code_end_number() {
+                // TODO Auto-generated method stub
+                return 9;
+            }
+
+            @Override
+            public boolean win_code_repeatable() {
+                // TODO Auto-generated method stub
+                return true;
+            }
+
+            @Override
+            public boolean winCodeCheck(String winCode) {
+                if (StringUtils.isEmpty(winCode))
+                    return false;
+                return winCode.matches("\\d(,\\d){2}");
+            }
+        }
+
+        public final class China_chongqing10 implements IChina_cai {
+            @Override
+            public int win_code_length() {
+                // TODO Auto-generated method stub
+                return 8;
+            }
+
+            @Override
+            public int win_code_begin_number() {
+                // TODO Auto-generated method stub
+                return 1;
+            }
+
+            @Override
+            public int win_code_end_number() {
+                // TODO Auto-generated method stub
+                return 20;
+            }
+
+            @Override
+            public boolean win_code_repeatable() {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            @Override
+            public boolean winCodeCheck(String winCode) {
+                if (StringUtils.isEmpty(winCode) || cheakIsRepeat(winCode.split(",")))
+                    return false;
+                return winCode.matches("([1-9]|1\\d|20)(,[1-9]|,1\\d|,20){7}");
+            }
+        }
+
+        public final class China_guangxi10 implements IChina_cai {
+            @Override
+            public int win_code_length() {
+                // TODO Auto-generated method stub
+                return 5;
+            }
+
+            @Override
+            public int win_code_begin_number() {
+                // TODO Auto-generated method stub
+                return 1;
+            }
+
+            @Override
+            public int win_code_end_number() {
+                // TODO Auto-generated method stub
+                return 21;
+            }
+
+            @Override
+            public boolean win_code_repeatable() {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            @Override
+            public boolean winCodeCheck(String winCode) {
+                if (StringUtils.isEmpty(winCode) || cheakIsRepeat(winCode.split(","))) {
+                    return false;
+                }
+                return winCode.matches("([1-9]|1\\d|2[0-1])(,[1-9]|,1\\d|,2[0-1]){4}");
+            }
+        }
+
+        public final class Malaysia_wanzi implements IMalasia_cai {
+            @Override
+            public int win_code_length() {
+                // TODO Auto-generated method stub
+                return 5;
+            }
+
+            @Override
+            public int win_code_count() {
+                // TODO Auto-generated method stub
+                return 1;
+            }
+
+            @Override
+            public boolean winCodeCheck(String winCode) {
+                // TODO Auto-generated method stub
+                return true;
+            }
+        }
+
+        public final class Malaysia_damacai implements IMalasia_cai {
+            @Override
+            public int win_code_length() {
+                // TODO Auto-generated method stub
+                return 5;
+            }
+
+            @Override
+            public int win_code_count() {
+                // TODO Auto-generated method stub
+                return 1;
+            }
+
+            @Override
+            public boolean winCodeCheck(String winCode) {
+                // TODO Auto-generated method stub
+                return true;
+            }
+        }
+
+        public final class Malaysia_duoduocai implements IMalasia_cai {
+            @Override
+            public int win_code_length() {
+                // TODO Auto-generated method stub
+                return 5;
+            }
+
+            @Override
+            public int win_code_count() {
+                // TODO Auto-generated method stub
+                return 1;
+            }
+
+            @Override
+            public boolean winCodeCheck(String winCode) {
+                // TODO Auto-generated method stub
+                return true;
+            }
+        }
+
+
+        public final class Vietnam_mid_south implements IVietnam_cai {
+            @Override
+            public int win_code_begin_number() {
+                // TODO Auto-generated method stub
+                return 0;
+            }
+
+            @Override
+            public int win_code_end_number() {
+                // TODO Auto-generated method stub
+                return 9;
+            }
+
+            @Override
+            public boolean win_code_repeatable() {
+                // TODO Auto-generated method stub
+                return true;
+            }
+
+            @Override
+            public boolean winCodeCheck(String winCode) {
+
+                if (StringUtils.isEmpty(winCode)) {
+                    System.out.println("winCode cannot be empty.");
+                    return false;
+                }
+
+                List<VietnamLuckyEntity> midSouthLuckyEntities = JSONArray.parseArray(winCode, VietnamLuckyEntity.class);
+                if (midSouthLuckyEntities.size() != SystemMidSouthPrizeLevelDefine.EnumList().size() - 1) {//枚举类多定义了一个无意义的奖级，所以减1
+                    System.out.println("midSouthLuckyEntities.size() != 9:" + winCode);
+                    return false;
+                }
+
+                for (int i = 0; i < midSouthLuckyEntities.size(); i++) {
+                    SystemMidSouthPrizeLevelDefine midSouthPrizeLevelDefine = SystemMidSouthPrizeLevelDefine.EnumList().get(i + 1);//确定奖级
+                    if (midSouthLuckyEntities.get(i).getResultList().size() != midSouthPrizeLevelDefine.group_count) {
+                        System.out.println("midSouthLuckyEntities.get(i):" + midSouthLuckyEntities.get(i) + ";midSouthPrizeLevelDefine.group_count:" + midSouthPrizeLevelDefine.group_count);
+                        return false;
+                    }
+
+                    for (String code : midSouthLuckyEntities.get(i).getResultList()) {
+                        if (!code.matches(midSouthPrizeLevelDefine.regex)) {
+                            System.out.println("wrong winCode:" + code + ";midSouthPrizeLevelDefine:" + midSouthPrizeLevelDefine.cnname + ";" + midSouthPrizeLevelDefine.regex + ";" + midSouthPrizeLevelDefine.one_group_num_length);
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+        }
+
+        public final class Vietnam_north implements IVietnam_cai {
+            @Override
+            public int win_code_begin_number() {
+                // TODO Auto-generated method stub
+                return 0;
+            }
+
+            @Override
+            public int win_code_end_number() {
+                // TODO Auto-generated method stub
+                return 9;
+            }
+
+            @Override
+            public boolean win_code_repeatable() {
+                // TODO Auto-generated method stub
+                return true;
+            }
+
+            @Override
+            public boolean winCodeCheck(String winCode) {
+
+                if (StringUtils.isEmpty(winCode)) {
+                    System.out.println("winCode cannot be empty.");
+                    return false;
+                }
+
+                List<VietnamLuckyEntity> northLuckyEntities = JSONArray.parseArray(winCode, VietnamLuckyEntity.class);
+                if (northLuckyEntities.size() != SystemNorthPrizeLevelDefine.EnumList().size() - 1) { //总共8个奖级
+                    System.out.println("northLuckyEntities.size() != 8:" + winCode);
+                    return false;
+                }
+
+                for (int i = 0; i < northLuckyEntities.size(); i++) {
+                    SystemNorthPrizeLevelDefine northPrizeLevelDefine = SystemNorthPrizeLevelDefine.EnumList().get(i + 1);
+                    if (northLuckyEntities.get(i).getResultList().size() != northPrizeLevelDefine.group_count) {
+                        System.out.println("northLuckyEntities.get(i):" + northLuckyEntities.get(i) + ";northPrizeLevelDefine.group_count:" + northPrizeLevelDefine.group_count);
+                        return false;
+                    }
+                    for (String code : northLuckyEntities.get(i).getResultList()) {
+                        if (!code.matches(northPrizeLevelDefine.regex)) {
+                            System.out.println("wrong winCode:" + code + ";northPrizeLevelDefine:" + northPrizeLevelDefine.cnname + ";" + northPrizeLevelDefine.regex + ";" + northPrizeLevelDefine.one_group_num_length);
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+        }
+    }
+
+    /**
+     * 判断数组中是否有重复的值:有重复为true
+     */
+    public static boolean cheakIsRepeat(String[] winNumbers) {
+        HashSet<String> hashSet = new HashSet<String>();
+        for (String str : winNumbers) {
+            hashSet.add(str);
+        }
+        if (hashSet.size() == winNumbers.length)
+            return false;
+        return true;
+    }
+
+    /**
+     * 判断数组中是否有重复的值:有重复为true
+     */
+    public static boolean cheakLucky28Sum(String[] winNumbers) {
+        int sum = 0;
+        for (int i = 0; i < 3; i++) {
+            sum += Integer.valueOf(winNumbers[i]);
+        }
+        if (sum == Integer.valueOf(winNumbers[3]))
+            return true;
+        return false;
+    }
+
+}
